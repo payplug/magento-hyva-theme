@@ -7,19 +7,16 @@
 
 declare(strict_types=1);
 
-namespace Hyva\CheckoutPayplug\Provider;
+namespace Payplug\PaymentsHyvaTheme\Provider;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Module\ResourceInterface;
 
 class Config
 {
-    private const HYVA_MODULE_NAME = 'Hyva_CheckoutPayplug';
+    private const HYVA_MODULE_NAME = 'Payplug_PaymentsHyvaTheme';
     public const HYVA_VERSION_XML_PATH = 'hyva/checkout_payplug/version';
 
     public function __construct(
-        protected ScopeConfigInterface $config,
-        protected ResourceInterface $moduleResource,
         protected ScopeConfigInterface $scopeConfig
     ) {
     }

@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
-namespace Hyva\CheckoutPayplug\Setup;
+namespace Payplug\PaymentsHyvaTheme\Setup;
 
-use Hyva\CheckoutPayplug\Provider\Config;
+use Payplug\PaymentsHyvaTheme\Provider\Config;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;

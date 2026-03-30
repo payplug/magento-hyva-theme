@@ -7,14 +7,11 @@
 
 declare(strict_types=1);
 
-namespace Hyva\CheckoutPayplug\Controller\Oney;
+namespace Payplug\PaymentsHyvaTheme\Controller\Oney;
 
-use Dnd\Catalog\Model\ProductOptions;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\Framework\App\Action\Context;
@@ -24,6 +21,7 @@ use Magento\Framework\View\LayoutInterface;
 use Payplug\Payments\Block\Oney\Simulation as OneySimulationBlock;
 use Payplug\Payments\Controller\Oney\Simulation as BaseSimulation;
 use Payplug\Payments\Logger\Logger;
+use Payplug\Payments\ViewModel\Oney as OneyViewHelper;
 
 /**
  * {@override} To use Hyva templates
@@ -33,8 +31,8 @@ class Simulation extends BaseSimulation
     /**
      * Constants to the Hyva templates
      */
-    public const HYVA_CONTENT = 'Hyva_CheckoutPayplug::oney/simulation_content.phtml';
-    public const HYVA_SIMULATION = 'Hyva_CheckoutPayplug::oney/simulation.phtml';
+    public const HYVA_CONTENT = 'Payplug_PaymentsHyvaTheme::oney/simulation_content.phtml';
+    public const HYVA_SIMULATION = 'Payplug_PaymentsHyvaTheme::oney/simulation.phtml';
 
     public function __construct(
         Context $context,
@@ -44,9 +42,10 @@ class Simulation extends BaseSimulation
         protected LinkManagementInterface $linkManagement,
         protected Logger $logger,
         protected ProductRepositoryInterface $productRepository,
-        protected CollectionFactory $productCollectionFactory
+        protected CollectionFactory $productCollectionFactory,
+        protected OneyViewHelper $oneyViewHelper
     ) {
-        parent::__construct($context, $resultJsonFactory, $productFactory, $layout, $linkManagement);
+        parent::__construct($context, $resultJsonFactory, $productFactory, $layout, $linkManagement, $oneyViewHelper);
     }
 
     /**
@@ -54,7 +53,6 @@ class Simulation extends BaseSimulation
      */
     public function execute(): Json
     {
-        $this->logger->info('----------Hyva Simulation-----------');
         $result = $this->resultJsonFactory->create();
 
         try {
@@ -75,6 +73,7 @@ class Simulation extends BaseSimulation
             $block = $this->layout->createBlock(OneySimulationBlock::class)
                 ->setTemplate($template)
                 ->setAmount($productPrice)
+                ->setData('oneyViewHelper', $this->oneyViewHelper)
                 ->setQty($qty);
 
             $result->setData([

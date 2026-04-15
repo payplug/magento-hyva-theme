@@ -11,6 +11,8 @@
         <remove src="Payplug_Payments::js/oney.js"/>
     </head>
     <body>
+        <referenceBlock name="payplug_payments_formjs" remove="true" />
+
         <!-- Oney -->
         <referenceBlock name="payplug-payments-product-oney-wrapper"
                         template="Payplug_PaymentsHyvaTheme::oney/simulation-wrapper-cart.phtml">

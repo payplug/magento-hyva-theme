@@ -31,7 +31,7 @@ class Simulation extends BaseSimulation
     /**
      * Constants to the Hyva templates
      */
-    public const HYVA_CONTENT = 'Payplug_PaymentsHyvaTheme::oney/simulation_content.phtml';
+    public const HYVA_CONTENT = 'Payplug_PaymentsHyvaTheme::oney/simulation-content.phtml';
     public const HYVA_SIMULATION = 'Payplug_PaymentsHyvaTheme::oney/simulation.phtml';
 
     public function __construct(

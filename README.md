@@ -1,6 +1,8 @@
-# Payplug for Hyvä
+# Payplug for Hyvä Theme
 
-Official compatibility module of [Magento 2 Payplug module](https://github.com/payplug/payplug-magento2/) for Hyvä.
+Official compatibility module of [Magento 2 Payplug module](https://github.com/payplug/payplug-magento2/) for Hyvä Theme.
+
+> If you also use Hyvä Checkout, you will need to install the specific [https://github.com/payplug/magento-hyva-checkout](payplug/magento-hyva-checkout) module.
 
 ## About Payplug
 
@@ -8,24 +10,18 @@ Official compatibility module of [Magento 2 Payplug module](https://github.com/p
 
 Please refer to https://www.payplug.com/fr for more informations.
 
-## Requirements
-
-In order to work, this module requires a [Hyvä Checkout](https://www.hyva.io/hyva-checkout.html) licence.
-
-Please refer to https://docs.hyva.io for more instructions.
-
 ## Installation
 
 1 - Install the payplug-magento-hyva module via composer:
 
 ```bash
-composer require payplug/payplug-magento-hyva
+composer require payplug/payplug-magento-hyva-theme
 ```
 
 2 - Enable module:
 
 ```bash
-bin/magento module:enable Hyva_CheckoutPayplug
+bin/magento module:enable Payplug_PaymentsHyvaTheme
 bin/magento setup:upgrade
 ```
 

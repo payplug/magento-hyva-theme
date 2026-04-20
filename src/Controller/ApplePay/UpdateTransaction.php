@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Hyva\CheckoutPayplug\Controller\ApplePay;
+namespace Payplug\PaymentsHyvaTheme\Controller\ApplePay;
 
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;

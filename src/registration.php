@@ -7,4 +7,4 @@
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Hyva_CheckoutPayplug', __DIR__);
+ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Payplug_PaymentsHyvaTheme', __DIR__);

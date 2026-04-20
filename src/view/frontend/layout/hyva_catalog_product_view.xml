@@ -11,14 +11,14 @@
         <remove src="Payplug_Payments::js/oney.js" />
     </head>
     <body>
-        <referenceBlock name="payplug-payments-product-oney-wrapper" template="Hyva_CheckoutPayplug::oney/simulation_wrapper.phtml">
+        <referenceBlock name="payplug-payments-product-oney-wrapper" template="Payplug_PaymentsHyvaTheme::oney/simulation_wrapper.phtml">
             <arguments>
                 <argument name="container_css_classes" xsi:type="string">
                     mt-4
                 </argument>
             </arguments>
         </referenceBlock>
-        <referenceBlock name="payplug-payments-product-oney-simulation" template="Hyva_CheckoutPayplug::oney/simulation.phtml">
+        <referenceBlock name="payplug-payments-product-oney-simulation" template="Payplug_PaymentsHyvaTheme::oney/simulation.phtml">
             <block name="simulation-loading" as="loading" template="Hyva_Theme::ui/loading.phtml" />
             <arguments>
                 <argument name="popin_position" xsi:type="string">
@@ -29,10 +29,10 @@
 
         <referenceContainer name="before.body.end">
             <block name="payplug.checkout.index.script.standard"
-                   template="Hyva_CheckoutPayplug::oney/simulation-csp-js.phtml"
+                   template="Payplug_PaymentsHyvaTheme::oney/simulation-csp-js.phtml"
             />
             <block name="payplug.checkout.index.script.simulation.content"
-                   template="Hyva_CheckoutPayplug::oney/simulation_content-csp-js.phtml"
+                   template="Payplug_PaymentsHyvaTheme::oney/simulation_content-csp-js.phtml"
             />
         </referenceContainer>
 

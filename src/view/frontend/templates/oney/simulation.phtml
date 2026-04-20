@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-use Hyva\CheckoutPayplug\ViewModel\PayplugIcons;
+use Payplug\PaymentsHyvaTheme\ViewModel\PayplugThemeIcons;
 use Magento\Framework\Escaper;
 use Payplug\Payments\Block\Oney\Simulation;
 use Payplug\Payments\Gateway\Config\OneyWithoutFees;
@@ -23,8 +23,8 @@ $hasError = (int)!$oneySimulation->getSuccess();
 // {String} : 'top' (default) | 'bottom'
 $popinPosition = $block->getPopinPosition() ?? 'top';
 
-/** @var PayplugIcons $viewModels */
-$icons = $viewModels->require(PayplugIcons::class);
+/** @var PayplugThemeIcons $viewModels */
+$icons = $viewModels->require(PayplugThemeIcons::class);
 ?>
 
 <div x-data="oneySimulation"

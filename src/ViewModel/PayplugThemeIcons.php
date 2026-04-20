@@ -7,11 +7,11 @@
 
 declare(strict_types=1);
 
-namespace Hyva\CheckoutPayplug\ViewModel;
+namespace Payplug\PaymentsHyvaTheme\ViewModel;
 
 use Hyva\Theme\ViewModel\SvgIcons;
 
-class PayplugIcons extends SvgIcons
+class PayplugThemeIcons extends SvgIcons
 {
 
 }

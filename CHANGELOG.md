@@ -1,9 +1,25 @@
-# Changelog - Hyvä compatibility module for Payplug payments
+# Changelog - Hyvä Theme compatibility module for Payplug payments
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [4.0.0](https://github.com/payplug/payplug-magento-hyva/releases/tag/4.0.0) - 2026-XX-XX
+
+> [!NOTE]
+>
+> The [previous module](https://github.com/payplug/magento-hyva-theme/tree/feature/MAG-626) including developments for both the theme and the checkout is now deprecated.
+> Starting from this release, developments on this module now only include the Hyvä Theme compatibiliy developements.
+> Hyvä Checkout compatibiliy developments are available on the [https://github.com/payplug/magento-hyva-checkout](payplug/magento-hyva-checkout) dedicated module.
+
+### Main feature
+- Remove Hyvä Checkout module devs
+
+### Removed
+- Remove Hyvä Checkout module devs [#626](https://github.com/payplug/magento-hyva-theme/pull/1/changes/491b7f6d3adf70ddd77760e08ad69e94336f0f6b)
+
+**[View diff](https://github.com/payplug/payplug-magento-hyva/compare/3.0.0...4.0.0)**
 
 ## [3.0.0](https://github.com/payplug/payplug-magento-hyva/releases/tag/3.0.0) - 2026-03-03
 

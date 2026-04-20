@@ -11,7 +11,7 @@
         <remove src="Payplug_Payments::js/oney.js" />
     </head>
     <body>
-        <referenceBlock name="payplug-payments-product-oney-wrapper" template="Payplug_PaymentsHyvaTheme::oney/simulation-wrapper.phtml">
+        <referenceBlock name="payplug-payments-product-oney-wrapper" template="Payplug_PaymentsHyvaTheme::oney/simulation-wrapper-product.phtml">
             <arguments>
                 <argument name="container_css_classes" xsi:type="string">
                     mt-4

@@ -13,7 +13,7 @@
     <body>
         <!-- Oney -->
         <referenceBlock name="payplug-payments-product-oney-wrapper"
-                        template="Payplug_PaymentsHyvaTheme::oney/simulation-wrapper-checkout.phtml">
+                        template="Payplug_PaymentsHyvaTheme::oney/simulation-wrapper-cart.phtml">
             <arguments>
                 <argument name="container_css_classes" xsi:type="string">-mt-6 mb-8</argument>
             </arguments>

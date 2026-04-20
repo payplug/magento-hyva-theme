@@ -21,12 +21,3 @@ apple-pay-button {
         @apply w-full;
     }
 }
-
-/* Checkout item */
-#payment-method-view-payplug_payments_apple_pay {
-    @apply text-center;
-
-    apple-pay-button {
-        --apple-pay-button-height: 2rem;
-    }
-}

@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Hyva\CheckoutPayplug\ViewModel;
+namespace Payplug\PaymentsHyvaTheme\ViewModel;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Payplug\Payments\Helper\Oney;

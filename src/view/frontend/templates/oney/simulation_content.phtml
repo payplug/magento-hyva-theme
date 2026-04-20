@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-use Hyva\CheckoutPayplug\ViewModel\PayplugIcons;
+use Payplug\PaymentsHyvaTheme\ViewModel\PayplugThemeIcons;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Magento\Framework\Escaper;
 use Magento\Framework\Pricing\Helper\Data;
@@ -25,8 +25,8 @@ $pricingHelper = $this->helper(Data::class);
 /** @var HeroiconsSolid $heroicons */
 $heroicons = $viewModels->require(HeroiconsSolid::class);
 
-/** @var PayplugIcons $viewModels */
-$icons = $viewModels->require(PayplugIcons::class);
+/** @var PayplugThemeIcons $viewModels */
+$icons = $viewModels->require(PayplugThemeIcons::class);
 ?>
 <div x-data="checkoutOneySimulationContent">
 
@@ -47,7 +47,7 @@ $icons = $viewModels->require(PayplugIcons::class);
         <span class="sr-only">
             <?= $block->escapeHtml(__('Oney')); ?>
         </span>
-        <?= $icons->renderHtml('oney', '', 116, 36, ['aria-hidden' => 'true']); ?>
+        <?= $icons->renderHtml('oney/oney', '', 116, 36, ['aria-hidden' => 'true']); ?>
 
         <?php if ($isOneyWithoutFees): ?>
             <?= /* @noEscape */ __(

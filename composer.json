@@ -13,7 +13,7 @@
     ],
     "require": {
         "hyva-themes/magento2-default-theme": "^1.4",
-        "payplug/payplug-magento2": "dev-release/v4.7.0"
+        "payplug/payplug-magento2": "4.7.0"
     },
     "autoload": {
         "files": [

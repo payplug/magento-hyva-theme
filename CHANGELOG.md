@@ -10,8 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 > [!NOTE]
 >
 > The [previous module](https://github.com/payplug/magento-hyva-theme) including developments for both the theme and the checkout is now deprecated.
-> Starting from this release, developments on this module now only include the Hyvä Theme compatibiliy developements.
-> Hyvä Checkout compatibiliy developments are available on the [https://github.com/payplug/magento-hyva-checkout](payplug/magento-hyva-checkout) dedicated module.
+> Starting from this release, developments on this module now only include the Hyvä Theme compatibility developements.
+> Hyvä Checkout compatibility developments are available on the [https://github.com/payplug/magento-hyva-checkout](payplug/magento-hyva-checkout) dedicated module.
 
 ### Main feature
 - Add Payplug module 4.7.0 version support [#587](https://github.com/payplug/magento-hyva-theme/commit/3da1973a9bfed6d8685c97530874e87504c9e019)

@@ -209,7 +209,7 @@ $urlProvider = $viewModels->require(UrlProvider::class);
                                     self.baseAmount = response.base_amount;
                                 }
 
-                                self.orderId = response.order_id;
+                                self.maskedQuoteId = response.masked_quote_id;
                                 self.applePaySession.completeMerchantValidation(response.merchantSession);
                             } catch (e) {
                                 self.cancelPayplugPaymentWithAbort();
@@ -274,7 +274,7 @@ $urlProvider = $viewModels->require(UrlProvider::class);
                 ]);
 
                 formData.append('shipping_method', this.shippingMethod || '');
-                formData.append('order_id', this.orderId);
+                formData.append('masked_quote_id', this.maskedQuoteId);
                 formData.append('workflowType', this.workflowType);
 
                 return formData;
@@ -414,7 +414,7 @@ $urlProvider = $viewModels->require(UrlProvider::class);
                 };
             },
             clearOrderData() {
-                this.orderId = null;
+                this.maskedQuoteId = null;
                 this.baseAmount = 0;
                 this.shippingAmount = 0;
                 this.shippingMethod = null;
@@ -437,7 +437,7 @@ $urlProvider = $viewModels->require(UrlProvider::class);
                 });
             },
             cancelPayplugPayment() {
-                if (this.orderId) {
+                if (this.maskedQuoteId) {
                     const url = BASE_URL + this.cancelUrl + '?form_key=' + (document.cookie.match(/form_key=([^;]+)/) || [])[1];
 
                     fetch(url, { method: 'GET', credentials: 'same-origin' })

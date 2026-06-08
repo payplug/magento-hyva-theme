@@ -1,7 +1,7 @@
 {
     "name": "payplug/payplug-magento-hyva-theme",
     "description": "Hyvä Theme Compatibility module for Payplug_Payments",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "type": "magento2-module",
     "keywords": ["Payplug", "Adobe Commerce", "Magento", "Hyvä"],
     "license": "OSL-3.0",
@@ -13,7 +13,7 @@
     ],
     "require": {
         "hyva-themes/magento2-default-theme": "^1.4",
-        "payplug/payplug-magento2": "4.7.1"
+        "payplug/payplug-magento2": "4.7.2"
     },
     "autoload": {
         "files": [

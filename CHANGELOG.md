@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.1](https://github.com/payplug/payplug-magento-hyva/releases/tag/4.0.0) - 2026-06-XX
+
+### Main feature
+- Add Payplug module 4.7.1 version support
+
+### Modified
+- Use masked quote id for endpoints [#753](https://github.com/payplug/magento-hyva-theme/pull/8/changes/491919aedf075247600066a7b05e95a2979af0af)
+
+### Fixed
+- Fix Oney simulator panel on PDP [#674](https://github.com/payplug/magento-hyva-theme/pull/9/changes/55d72465b191ae150a876a2357940bdb689615a3)
+
 ## [4.0.0](https://github.com/payplug/payplug-magento-hyva/releases/tag/4.0.0) - 2026-06-01
 
 > [!NOTE]

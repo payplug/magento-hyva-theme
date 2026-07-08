@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Payplug\PaymentsHyvaTheme\ViewModel\OneyDisplayer;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
@@ -16,10 +17,14 @@ use Magento\Framework\View\Element\Template;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 /** @var HyvaCsp $hyvaCsp */
+/** @var OneyDisplayer $oneyDisplayer */
+$oneyDisplayer = $viewModels->require(OneyDisplayer::class);
 ?>
 
 <script>
     function oneySimulation() {
+        const oneySimulationUrl = '<?= $escaper->escapeJs($oneyDisplayer->getOneySimulationUrl()) ?>';
+
         return Object.assign(
             {},
             {
@@ -41,7 +46,7 @@ use Magento\Framework\View\Element\Template;
                             paymentType: '3x',
                             init() {
                                 this.isLoading = true;
-                                
+
                                 this.getPaymentSimulations()
                                     .then(response => response.json())
                                     .then(data => {
@@ -69,7 +74,7 @@ use Magento\Framework\View\Element\Template;
                             getPaymentSimulations() {
                                 const formData = this.getFormData();
                                 const body = new URLSearchParams(formData);
-                                return fetch(`${BASE_URL}/payplug_payments/oney/simulation`+ '?form_key=' + hyva.getFormKey(), {
+                                return fetch(oneySimulationUrl + '?form_key=' + hyva.getFormKey(), {
                                     method: 'post',
                                     body,
                                     headers: {'contentType': 'application/x-www-form-urlencoded', 'accept': 'application/json'}
@@ -129,7 +134,7 @@ use Magento\Framework\View\Element\Template;
             }
         )
     }
-    
+
     window.addEventListener('alpine:init', () => {
         Alpine.data('oneySimulation', oneySimulation)
     }, {once: true});

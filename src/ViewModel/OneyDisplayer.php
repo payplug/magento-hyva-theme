@@ -17,7 +17,7 @@ use Payplug\Payments\Helper\Oney;
 
 class OneyDisplayer implements ArgumentInterface
 {
-    private const ONEY_SIMULATION_ROUTE = 'hyva_checkout_payplug/oney/simulation';
+    private const ONEY_SIMULATION_ROUTE = 'hyva_theme_payplug/oney/simulation';
 
     /**
      * @param Oney $oney

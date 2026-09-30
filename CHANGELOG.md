@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.2](https://github.com/payplug/magento-hyva-theme/releases/tag/v4.0.2) - 2026-09-30
+
+### Main feature
+- Add Payplug module 4.8.0 version support
+- Remove unused UpdateTransaction controller and rename routes to match current module name (MAG-825)
+
+### Modified
+- Rename routes to match current module name (MAG-825) [#03a403c9](https://github.com/payplug/magento-hyva-theme/commit/03a403c9e359cf965e01b8591f92408bf610b15f)
+
+### Removed
+- Remove unused UpdateTransaction controller (MAG-825) [#03a403c9](https://github.com/payplug/magento-hyva-theme/commit/03a403c9e359cf965e01b8591f92408bf610b15f)
+
+**[View diff](https://github.com/payplug/magento-hyva-theme/compare/v4.0.1...v4.0.2)**
+
 ## [4.0.1](https://github.com/payplug/payplug-magento-hyva/releases/tag/4.0.0) - 2026-06-20
 
 ### Main feature

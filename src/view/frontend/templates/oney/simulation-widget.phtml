@@ -1,0 +1,105 @@
+<?php
+/**
+ * Payplug - https://www.payplug.com/
+ * Copyright © Payplug. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Payplug\Payments\ViewModel\Oney;
+use Payplug\PaymentsHyvaTheme\ViewModel\PayplugThemeIcons;
+
+/**
+ * @var Escaper $escaper
+ * @var Template $block
+ * @var ViewModelRegistry $viewModels
+ * @var Oney $oneyViewModel
+ * @var PayplugThemeIcons $icons
+ */
+$oneyViewModel = $block->getData('oney_view_model');
+
+if (!$oneyViewModel instanceof Oney || !$oneyViewModel->canDisplayOney()) {
+    return;
+}
+
+$isProduct = $block->getData('amount') !== null;
+$amount = $isProduct ? (float) $block->getData('amount') : $oneyViewModel->getCartAmount();
+$config = $oneyViewModel->getConfig($amount);
+
+if (empty($config) || !$config['is_enabled']) {
+    return;
+}
+
+$isOneyWithoutFees = $oneyViewModel->isWithoutFees($config);
+$isItalianStore = $oneyViewModel->isItalianStore();
+$isDisabled = !$config['is_eligible'];
+$productId = (int) $block->getData('product_id');
+$isCentered = (bool) $block->getData('is_centered');
+$buttonCssClasses = ($isCentered ? 'justify-center' : 'justify-end') . ($isDisabled ? ' text-gray-400' : ' text-oney');
+$textAlignClass = $isCentered ? 'text-center' : 'text-right';
+$icons = $viewModels->require(PayplugThemeIcons::class);
+?>
+<div x-data="payplugOneyWidget"
+     data-config="<?= $escaper->escapeHtmlAttr($oneyViewModel->getJsConfig($config, $isProduct)); ?>"
+     <?php if ($isProduct): ?>
+         data-product-id="<?= (int) $productId; ?>"
+         @update-qty-<?= (int) $productId; ?>.window="onUpdateQty"
+         @update-product-final-price.window="onUpdateFinalPrice"
+         @update-custom-option-active.window="onCustomOptionActive"
+         @update-custom-option-prices.window="onCustomOptionPrices"
+     <?php else: ?>
+         @update-totals.window="onUpdateTotals"
+     <?php endif; ?>
+     class="relative flex flex-col gap-2">
+    <button type="button"
+            class="inline-flex items-center <?= $escaper->escapeHtmlAttr($buttonCssClasses); ?>"
+            :class="buttonClass"
+            aria-disabled="<?= $isDisabled ? 'true' : 'false'; ?>"
+            :aria-disabled="ariaDisabled"
+            :aria-busy="ariaBusy"
+            @click="onClick">
+        <span class="uppercase text-sm font-bold">
+            <?= $escaper->escapeHtml(__('Or pay in')); ?>
+        </span>
+        <span class="inline-flex items-center">
+            <?php if ($isOneyWithoutFees): ?>
+                <span class="sr-only">
+                    <?= $escaper->escapeHtml(__('3x 4x Oney without fees')); ?>
+                </span>
+                <?= $isItalianStore
+                    ? $icons->renderHtml('oney/3x4x-it-without-fees-black', 'ml-2', 196, 23, ['aria-hidden' => 'true'])
+                    : $icons->renderHtml('oney/3x4x-without-fees-black', 'ml-2', 170, 23, ['aria-hidden' => 'true']);
+                ?>
+            <?php else: ?>
+                <span class="sr-only">
+                    <?= $escaper->escapeHtml(__('3x 4x Oney')); ?>
+                </span>
+                <?= $icons->renderHtml('oney/3x4x-black', 'ml-2', 110, 23, ['aria-hidden' => 'true']); ?>
+            <?php endif; ?>
+            <span class="sr-only">
+                <?= $escaper->escapeHtml(__('?')); ?>
+            </span>
+            <?= $icons->renderHtml('tooltip', 'ml-1', 14, 14, ['aria-hidden' => 'true']); ?>
+        </span>
+    </button>
+    <p class="<?= $escaper->escapeHtmlAttr($textAlignClass); ?> text-sm text-gray-500"
+       role="alert"
+       x-ref="error"
+       x-show="isErrorVisible"
+       x-cloak>
+        <?= $escaper->escapeHtml($oneyViewModel->getAmountRangeMessage()); ?>
+    </p>
+    <p class="<?= $escaper->escapeHtmlAttr($textAlignClass); ?> text-sm text-gray-500"
+       role="status"
+       x-show="isNoticeVisible"
+       x-cloak>
+        <?= $escaper->escapeHtml(__(
+            'Your payment schedule simulation is temporarily unavailable. ' .
+            'You will find this information at the payment stage.'
+        )); ?>
+    </p>
+</div>

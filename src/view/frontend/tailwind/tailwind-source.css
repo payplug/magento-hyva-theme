@@ -5,14 +5,11 @@
  */
 
 @import "./components/apple-pay.css";
+@import "./components/oney.css";
 
 @theme {
   /* Custom colors */
   --color-oney: #81BC00;
-  
-  /* Custom border colors */
-  --color-border-oney: #81BC00;
-  --color-border-oney-lighter: #DCE0E8;
 }
 
 @source "../layout/**/*.xml";

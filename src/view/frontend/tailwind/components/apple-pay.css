@@ -15,6 +15,11 @@ apple-pay-button {
     }
 }
 
+.pp-apple-pay-button apple-pay-button {
+    --apple-pay-button-height: 2.75rem;
+    --apple-pay-button-box-sizing: border-box;
+}
+
 /* Cart summary */
 .checkout-methods-items {
     apple-pay-button {

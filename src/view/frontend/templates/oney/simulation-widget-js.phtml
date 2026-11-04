@@ -1,0 +1,276 @@
+<?php
+/**
+ * Payplug - https://www.payplug.com/
+ * Copyright © Payplug. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\View\Element\Template;
+use Payplug\Payments\ViewModel\Oney;
+
+/**
+ * @var Template $block
+ * @var ViewModelRegistry $viewModels
+ * @var HyvaCsp $hyvaCsp
+ * @var Oney $oneyViewModel
+ */
+$oneyViewModel = $viewModels->require(Oney::class);
+
+if (!$oneyViewModel->canDisplayOney()) {
+    return;
+}
+?>
+<script>
+    (() => {
+        const loadTimeout = 10000;
+        let widgetPromise = null;
+
+        function loadOneyMerchantApp(loaderUrl) {
+            if (widgetPromise !== null) {
+                return widgetPromise;
+            }
+
+            widgetPromise = new Promise((resolve, reject) => {
+                let isSettled = false;
+                let timer = null;
+
+                const settle = (callback, value) => {
+                    if (isSettled) {
+                        return;
+                    }
+
+                    isSettled = true;
+                    clearTimeout(timer);
+                    callback(value);
+                };
+
+                timer = setTimeout(() => {
+                    settle(reject, new Error('Oney widget loading timed out.'));
+                }, loadTimeout);
+
+                const initWidget = () => {
+                    if (isSettled) {
+                        return;
+                    }
+
+                    if (typeof window.loadOneyWidget !== 'function') {
+                        settle(reject, new Error('Oney widget loader is not available.'));
+
+                        return;
+                    }
+
+                    window.loadOneyWidget(() => {
+                        if (window.oneyMerchantApp) {
+                            settle(resolve, window.oneyMerchantApp);
+                        } else {
+                            settle(reject, new Error('Oney widget is not available.'));
+                        }
+                    });
+                };
+
+                if (typeof window.loadOneyWidget === 'function') {
+                    initWidget();
+
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = loaderUrl;
+                script.async = true;
+                script.onload = initWidget;
+                script.onerror = () => {
+                    settle(reject, new Error('Oney widget loader could not be loaded.'));
+                };
+
+                document.head.appendChild(script);
+            });
+
+            widgetPromise.catch(() => {
+                widgetPromise = null;
+            });
+
+            return widgetPromise;
+        }
+
+        function payplugOneyWidget() {
+            return {
+                config: {},
+                unitPrice: 0,
+                qty: 1,
+                activeCustomOptions: [],
+                customOptionPrices: {},
+                isEligible: false,
+                isLoading: false,
+                isErrorVisible: false,
+                isNoticeVisible: false,
+                init() {
+                    try {
+                        this.config = JSON.parse(this.$el.dataset.config || '{}');
+                    } catch (e) {
+                        this.config = {};
+                    }
+
+                    this.unitPrice = parseFloat(this.config.amount) || 0;
+                    this.refreshEligibility();
+
+                    if (!this.config.is_product) {
+                        return;
+                    }
+
+                    const productId = this.$el.dataset.productId;
+                    const qtyInput = document.getElementById('qty[' + productId + ']');
+
+                    if (qtyInput) {
+                        this.$nextTick(() => {
+                            this.$dispatch('update-qty-' + productId, hyva.safeParseNumber(qtyInput.value));
+                        });
+                    }
+                },
+                getAmount() {
+                    if (!this.config.is_product) {
+                        return parseFloat(this.config.amount) || 0;
+                    }
+
+                    const customOptionsPrice = this.activeCustomOptions.reduce((total, customOptionId) => {
+                        return total + (parseFloat(this.customOptionPrices[customOptionId]) || 0);
+                    }, 0);
+
+                    return Math.round((this.unitPrice + customOptionsPrice) * this.qty * 100) / 100;
+                },
+                isAmountEligible(amount) {
+                    if (!this.config.is_enabled) {
+                        return false;
+                    }
+
+                    return amount >= parseFloat(this.config.min_amount) && amount <= parseFloat(this.config.max_amount);
+                },
+                refreshEligibility() {
+                    this.isEligible = this.isAmountEligible(this.getAmount());
+
+                    if (this.isEligible) {
+                        this.isErrorVisible = false;
+                    }
+                },
+                onUpdateTotals(event) {
+                    const segments = event.detail?.data?.total_segments || [];
+                    const grandTotal = segments.find(segment => segment.code === 'grand_total');
+
+                    if (!grandTotal) {
+                        return;
+                    }
+
+                    this.config.amount = parseFloat(grandTotal.value) || 0;
+                    this.refreshEligibility();
+                },
+                onUpdateQty(event) {
+                    const qty = parseFloat(event.detail);
+
+                    this.qty = isNaN(qty) || qty <= 0 ? 1 : qty;
+                    this.refreshEligibility();
+                },
+                onUpdateFinalPrice(event) {
+                    const finalPrice = parseFloat(event.detail);
+
+                    if (isNaN(finalPrice)) {
+                        return;
+                    }
+
+                    this.unitPrice = finalPrice;
+                    this.refreshEligibility();
+                },
+                onCustomOptionActive(event) {
+                    const customOptionId = event.detail?.customOptionId;
+
+                    this.activeCustomOptions = this.activeCustomOptions.filter(id => id !== customOptionId);
+
+                    if (event.detail?.active) {
+                        this.activeCustomOptions.push(customOptionId);
+                    }
+
+                    this.refreshEligibility();
+                },
+                onCustomOptionPrices(event) {
+                    if (event.detail) {
+                        this.customOptionPrices = event.detail;
+                    }
+
+                    this.refreshEligibility();
+                },
+                onClick() {
+                    const amount = this.getAmount();
+
+                    if (!this.isAmountEligible(amount)) {
+                        this.isNoticeVisible = false;
+                        this.isErrorVisible = !this.isErrorVisible && this.$refs.error.textContent.trim() !== '';
+
+                        return;
+                    }
+
+                    this.isErrorVisible = false;
+                    this.openSimulation(amount);
+                },
+                openSimulation(amount) {
+                    if (this.isLoading) {
+                        return;
+                    }
+
+                    this.isLoading = true;
+                    this.isNoticeVisible = false;
+
+                    loadOneyMerchantApp(this.config.loader_url)
+                        .then(oneyMerchantApp => {
+                            oneyMerchantApp.loadSimulationPopin({
+                                options: this.buildOptions(amount)
+                            });
+                        })
+                        .catch(error => this.handleError(error))
+                        .finally(() => {
+                            this.isLoading = false;
+                        });
+                },
+                buildOptions(amount) {
+                    return {
+                        country: this.config.country,
+                        language: this.config.language,
+                        merchant_guid: this.config.merchant_guid,
+                        payment_amount: amount,
+                        filter_by: 'business_transaction_codes',
+                        business_transaction_codes: Object.values(this.config.business_transaction_codes || {}),
+                        errorCallback: (status, response) => {
+                            this.handleError(status + ' - ' + response);
+                        }
+                    };
+                },
+                handleError(error) {
+                    console.warn('Oney widget error', error);
+
+                    this.isNoticeVisible = true;
+                },
+                buttonClass() {
+                    return {
+                        'text-oney': this.isEligible,
+                        'text-gray-400': !this.isEligible,
+                        'cursor-progress': this.isLoading,
+                        'opacity-60': this.isLoading
+                    };
+                },
+                ariaDisabled() {
+                    return this.isEligible ? 'false' : 'true';
+                },
+                ariaBusy() {
+                    return this.isLoading ? 'true' : 'false';
+                }
+            };
+        }
+
+        window.addEventListener('alpine:init', () => {
+            Alpine.data('payplugOneyWidget', payplugOneyWidget);
+        }, {once: true});
+    })();
+</script>
+
+<?php $hyvaCsp->registerInlineScript() ?>

@@ -7,23 +7,35 @@
 
 declare(strict_types=1);
 
-use Payplug\PaymentsHyvaTheme\ViewModel\OneyDisplayer;
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Catalog\Block\Product\View;
+use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Framework\Escaper;
 
-/** @var View $block */
-$price = $block->getProduct()->getFinalPrice(1);
-/** @var ViewModelRegistry $viewModels */
-/** @var OneyDisplayer $oneyDisplayer */
-$oneyDisplayer = $viewModels->require(OneyDisplayer::class);
-$containerCssClasses = $block->getContainerCssClasses();
+/**
+ * @var View $block
+ * @var Escaper $escaper
+ * @var ViewModelRegistry $viewModels
+ * @var ProductPrice $productPriceViewModel
+ */
+$simulationBlock = $block->getChildBlock('payplug-payments-product-oney-simulation');
+
+if (!$simulationBlock) {
+    return;
+}
+
+$product = $block->getProduct();
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+$simulationHtml = $simulationBlock
+    ->setData('amount', $productPriceViewModel->getPriceValue(FinalPrice::PRICE_CODE, $product))
+    ->setData('product_id', (int) $product->getId())
+    ->toHtml();
+
+if (trim($simulationHtml) === '') {
+    return;
+}
 ?>
-
-<?php if ($oneyDisplayer->canDisplayOney()): ?>
-    <div class="oney-wrapper oney-product <?= $escaper->escapeHtmlAttr($containerCssClasses); ?>">
-        <?= $block->getChildBlock('payplug-payments-product-oney-simulation')
-                ->setAmount($price)
-                ->toHtml();
-        ?>
+<div class="oney-wrapper oney-product <?= $escaper->escapeHtmlAttr($block->getContainerCssClasses()); ?>">
+    <?= /* @noEscape */ $simulationHtml; ?>
 </div>
-<?php endif; ?>

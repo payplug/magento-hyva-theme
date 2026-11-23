@@ -7,21 +7,19 @@
 
 declare(strict_types=1);
 
-use Payplug\PaymentsHyvaTheme\ViewModel\OneyDisplayer;
-use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
 
-/** @var ViewModelRegistry $viewModels */
-/** @var OneyDisplayer $oneyDisplayer */
+/**
+ * @var Template $block
+ * @var Escaper $escaper
+ */
+$simulationHtml = $block->getChildHtml('payplug-payments-product-oney-simulation');
 
-$oneyDisplayer = $viewModels->require(OneyDisplayer::class);
-$containerCssClasses = $block->getContainerCssClasses();
+if (trim($simulationHtml) === '') {
+    return;
+}
 ?>
-
-<?php if ($oneyDisplayer->canDisplayOney()): ?>
-<?= $block->getChildHtml('oney.simulation_content') ?>
-
-<div class="oney-wrapper <?= $escaper->escapeHtmlAttr($containerCssClasses); ?>">
-    <?= $block->getChildBlock('payplug-payments-product-oney-simulation')->toHtml(); ?>
+<div class="oney-wrapper <?= $escaper->escapeHtmlAttr($block->getContainerCssClasses()); ?>">
+    <?= /* @noEscape */ $simulationHtml; ?>
 </div>
-<?php endif; ?>
